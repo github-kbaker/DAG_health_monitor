@@ -23,31 +23,31 @@ function App() {
       {
         id: "api-gateway",
         name: "API Gateway",
-        health_endpoint: "https://httpstat.us/200",
+        health_endpoint: "https://www.google.com",
         dependencies: []
       },
       {
         id: "auth-service",
         name: "Authentication Service",
-        health_endpoint: "https://httpstat.us/200",
+        health_endpoint: "https://www.github.com",
         dependencies: ["api-gateway"]
       },
       {
         id: "user-service",
         name: "User Service",
-        health_endpoint: "https://httpstat.us/200",
+        health_endpoint: "https://www.cloudflare.com",
         dependencies: ["auth-service"]
       },
       {
         id: "database",
         name: "Database",
-        health_endpoint: "https://httpstat.us/500",
+        health_endpoint: "https://httpbin.org/status/500",
         dependencies: ["user-service"]
       },
       {
         id: "cache",
         name: "Redis Cache",
-        health_endpoint: "https://httpstat.us/503",
+        health_endpoint: "https://nonexistent-endpoint-12345.com/health",
         dependencies: ["user-service"]
       }
     ],
