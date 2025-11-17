@@ -1,0 +1,75 @@
+{
+  "nodes": [
+    {
+      "id": "github-api",
+      "name": "GitHub API",
+      "health_endpoint": "https://api.github.com/status",
+      "dependencies": []
+    },
+    {
+      "id": "github-web",
+      "name": "GitHub Web Interface",
+      "health_endpoint": "https://www.github.com",
+      "dependencies": ["github-api"]
+    },
+    {
+      "id": "git-operations",
+      "name": "Git Operations Service",
+      "health_endpoint": "https://www.github.com",
+      "dependencies": ["github-api"]
+    },
+    {
+      "id": "github-actions",
+      "name": "GitHub Actions",
+      "health_endpoint": "https://www.githubstatus.com",
+      "dependencies": ["github-api"]
+    },
+    {
+      "id": "github-pages",
+      "name": "GitHub Pages",
+      "health_endpoint": "https://pages.github.com",
+      "dependencies": ["git-operations"]
+    },
+    {
+      "id": "github-packages",
+      "name": "GitHub Packages",
+      "health_endpoint": "https://ghcr.io",
+      "dependencies": ["github-api"]
+    },
+    {
+      "id": "code-scanning",
+      "name": "Code Scanning",
+      "health_endpoint": "https://www.github.com",
+      "dependencies": ["github-actions"]
+    },
+    {
+      "id": "dependabot",
+      "name": "Dependabot",
+      "health_endpoint": "https://www.github.com",
+      "dependencies": ["github-api"]
+    },
+    {
+      "id": "webhooks",
+      "name": "Webhooks Service",
+      "health_endpoint": "https://www.github.com",
+      "dependencies": ["github-api"]
+    },
+    {
+      "id": "notifications",
+      "name": "Notifications",
+      "health_endpoint": "https://www.github.com",
+      "dependencies": ["webhooks"]
+    }
+  ],
+  "edges": [
+    { "from": "github-api", "to": "github-web" },
+    { "from": "github-api", "to": "git-operations" },
+    { "from": "github-api", "to": "github-actions" },
+    { "from": "github-api", "to": "github-packages" },
+    { "from": "github-api", "to": "dependabot" },
+    { "from": "github-api", "to": "webhooks" },
+    { "from": "git-operations", "to": "github-pages" },
+    { "from": "github-actions", "to": "code-scanning" },
+    { "from": "webhooks", "to": "notifications" }
+  ]
+}
