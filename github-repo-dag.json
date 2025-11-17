@@ -1,0 +1,122 @@
+{
+  "nodes": [
+    {
+      "id": "github-repo",
+      "name": "GitHub Repository",
+      "health_endpoint": "https://api.github.com/status",
+      "dependencies": []
+    },
+    {
+      "id": "ci-pipeline",
+      "name": "CI/CD Pipeline (GitHub Actions)",
+      "health_endpoint": "https://www.githubstatus.com",
+      "dependencies": ["github-repo"]
+    },
+    {
+      "id": "build-service",
+      "name": "Build Service",
+      "health_endpoint": "https://www.google.com",
+      "dependencies": ["ci-pipeline"]
+    },
+    {
+      "id": "test-runner",
+      "name": "Test Runner",
+      "health_endpoint": "https://www.github.com",
+      "dependencies": ["build-service"]
+    },
+    {
+      "id": "code-quality",
+      "name": "Code Quality Check",
+      "health_endpoint": "https://www.cloudflare.com",
+      "dependencies": ["build-service"]
+    },
+    {
+      "id": "security-scan",
+      "name": "Security Scanner",
+      "health_endpoint": "https://httpbin.org/status/200",
+      "dependencies": ["build-service"]
+    },
+    {
+      "id": "staging-deploy",
+      "name": "Staging Deployment",
+      "health_endpoint": "https://www.google.com",
+      "dependencies": ["test-runner", "code-quality", "security-scan"]
+    },
+    {
+      "id": "staging-env",
+      "name": "Staging Environment",
+      "health_endpoint": "https://www.github.com",
+      "dependencies": ["staging-deploy"]
+    },
+    {
+      "id": "integration-tests",
+      "name": "Integration Tests",
+      "health_endpoint": "https://www.cloudflare.com",
+      "dependencies": ["staging-env"]
+    },
+    {
+      "id": "production-deploy",
+      "name": "Production Deployment",
+      "health_endpoint": "https://httpbin.org/status/500",
+      "dependencies": ["integration-tests"]
+    },
+    {
+      "id": "prod-load-balancer",
+      "name": "Production Load Balancer",
+      "health_endpoint": "https://www.google.com",
+      "dependencies": ["production-deploy"]
+    },
+    {
+      "id": "prod-api-server-1",
+      "name": "API Server 1",
+      "health_endpoint": "https://www.github.com",
+      "dependencies": ["prod-load-balancer"]
+    },
+    {
+      "id": "prod-api-server-2",
+      "name": "API Server 2",
+      "health_endpoint": "https://www.cloudflare.com",
+      "dependencies": ["prod-load-balancer"]
+    },
+    {
+      "id": "prod-database",
+      "name": "Production Database",
+      "health_endpoint": "https://www.google.com",
+      "dependencies": ["prod-api-server-1", "prod-api-server-2"]
+    },
+    {
+      "id": "prod-cache",
+      "name": "Redis Cache",
+      "health_endpoint": "https://www.github.com",
+      "dependencies": ["prod-api-server-1", "prod-api-server-2"]
+    },
+    {
+      "id": "monitoring",
+      "name": "Monitoring Service",
+      "health_endpoint": "https://www.cloudflare.com",
+      "dependencies": ["prod-database", "prod-cache"]
+    }
+  ],
+  "edges": [
+    { "from": "github-repo", "to": "ci-pipeline" },
+    { "from": "ci-pipeline", "to": "build-service" },
+    { "from": "build-service", "to": "test-runner" },
+    { "from": "build-service", "to": "code-quality" },
+    { "from": "build-service", "to": "security-scan" },
+    { "from": "test-runner", "to": "staging-deploy" },
+    { "from": "code-quality", "to": "staging-deploy" },
+    { "from": "security-scan", "to": "staging-deploy" },
+    { "from": "staging-deploy", "to": "staging-env" },
+    { "from": "staging-env", "to": "integration-tests" },
+    { "from": "integration-tests", "to": "production-deploy" },
+    { "from": "production-deploy", "to": "prod-load-balancer" },
+    { "from": "prod-load-balancer", "to": "prod-api-server-1" },
+    { "from": "prod-load-balancer", "to": "prod-api-server-2" },
+    { "from": "prod-api-server-1", "to": "prod-database" },
+    { "from": "prod-api-server-1", "to": "prod-cache" },
+    { "from": "prod-api-server-2", "to": "prod-database" },
+    { "from": "prod-api-server-2", "to": "prod-cache" },
+    { "from": "prod-database", "to": "monitoring" },
+    { "from": "prod-cache", "to": "monitoring" }
+  ]
+}
