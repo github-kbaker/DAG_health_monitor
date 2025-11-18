@@ -337,7 +337,7 @@ MIT License
 
 ## Author
 
-Created with Emergent AI
+Creator: Kween Baker
 
 ## Support
 
